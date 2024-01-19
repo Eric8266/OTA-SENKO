@@ -6,7 +6,7 @@ class Senko:
     raw = "https://raw.githubusercontent.com"
     github = "https://github.com"
 
-    def __init__(self, user, repo, url=None, branch="master", working_dir="app", files=["boot.py", "main.py"], headers={}):
+    def __init__(self, USER, REPOSITORY, url=None, branch="master", working_dir="app", files=["boot.py", "main.py"], headers={}):
         """Senko OTA agent class.
 
         Args:
@@ -18,7 +18,7 @@ class Senko:
             files (list): Files included in OTA update.
             headers (list, optional): Headers for urequests.
         """
-        self.base_url = "{}/{}/{}".format(self.raw, user, repo) if user else url.replace(self.github, self.raw)
+        self.base_url = "{}/{}/{}".format(self.raw, USER, REPOSITORY) if USER else url.replace(self.github, self.raw)
         self.url = url if url is not None else "{}/{}/{}".format(self.base_url, branch, working_dir)
         self.headers = headers
         self.files = files

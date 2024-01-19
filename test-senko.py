@@ -6,7 +6,7 @@ import time
 from time import sleep
 import dht
 import network
-from CONFIG import SSID, PASSWORD, USER, REPOSITORY
+from CONFIG import ssid, password, user, repository
 
 #OTA = senko.Senko(
 #  user="Eric8266", # Required
@@ -16,17 +16,12 @@ from CONFIG import SSID, PASSWORD, USER, REPOSITORY
 #  files = ["boot.py", "main.py"]
 #)
 
-#GITHUB_URL = "https://github.com/Eric8266/OTA-SENKO/"
-#OTA = senko.Senko(url=GITHUB_URL, files=["boot.py", "main.py"])
-
-#OTA = senko.Senko(
-#  user=USER, repo=REPOSITORY, files = ["boot.py", "main.py"]
-#)
+GITHUB_URL = "https://github.com/Eric8266/OTA-SENKO/"
+OTA = senko.Senko(url=GITHUB_URL, files=["boot.py", "main.py"])
 
 OTA = senko.Senko(
-  USER, REPOSITORY, files = ["test1.py", "test2.py"]
+  user=USER, repo=REPOSITORY, files = ["boot.py", "main.py"]
 )
-
 
 power_status = Pin(13, Pin.OUT)
 wifi_status = Pin(12, Pin.OUT)
@@ -48,7 +43,7 @@ def wifi_setup():  #Exit of Routine: wifi_status() = 1 means connected, 0 mean n
 
     station.active(True)
     
-    station.connect(SSID, PASSWORD)
+    station.connect(ssid, password)
     start_time = time.time()
 
     stop_time = time.time()
@@ -63,7 +58,7 @@ def wifi_setup():  #Exit of Routine: wifi_status() = 1 means connected, 0 mean n
             break
         if station.isconnected() == True:
             wifi_status.on()  #Wifi LED is put ON
-            print('Wifi connection successfully to:',SSID,' with IP, Mask, Gateway, DNS:')
+            print('Wifi connection successfully to:',ssid,' with IP, Mask, Gateway, DNS:')
             print(station.ifconfig())
             break
     return(wifi_status)
@@ -90,13 +85,13 @@ else:
     
 if wifi_status() == 1:
     print('Check for Update')
-    input('Wait here, before updating')
+    print('URL',firmware_url)
+
 ######################
 ###  NEW CODE OTA  ###
 
 if OTA.update():
     print("Updated to the latest version! Rebooting...")
-    input('Update done')
     machine.reset()
     
 
