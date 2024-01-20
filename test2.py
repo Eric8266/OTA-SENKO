@@ -1,2 +1,2 @@
-print('Test2')
-#UPDATE 2
+print('Test2 in main dir')
+#UPDATE 4
