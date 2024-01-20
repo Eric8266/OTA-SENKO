@@ -6,7 +6,7 @@ class Senko:
     raw = "https://raw.githubusercontent.com"
     github = "https://github.com"
 
-    def __init__(self, USER, REPOSITORY, url=None, branch="master", working_dir="app", files=["boot.py", "main.py"], headers={}):
+    def __init__(self, USER, REPOSITORY, url=None, branch="master", working_dir="app", files=["test1.py", "test2.py"], headers={}):
         """Senko OTA agent class.
 
         Args:
@@ -19,9 +19,13 @@ class Senko:
             headers (list, optional): Headers for urequests.
         """
         self.base_url = "{}/{}/{}".format(self.raw, USER, REPOSITORY) if USER else url.replace(self.github, self.raw)
+        print('self.base_url: ',self.base_url)
         self.url = url if url is not None else "{}/{}/{}".format(self.base_url, branch, working_dir)
+        print('self.url: ',self.url)
         self.headers = headers
+        print('self.headers: ',self.headers)
         self.files = files
+        print('self.files: ',self.files)
 
     def _check_hash(self, x, y):
         x_hash = uhashlib.sha1(x.encode())
@@ -46,9 +50,12 @@ class Senko:
 
     def _check_all(self):
         changes = []
-
+        print('enter check_all routine')
+        print('self.url: ', self.url)
         for file in self.files:
+            print('self.files: ',self.files)
             latest_version = self._get_file(self.url + "/" + file)
+            print('latest_version: ',latest_version)
             if latest_version is None:
                 continue
 
@@ -60,7 +67,8 @@ class Senko:
 
             if not self._check_hash(latest_version, local_version):
                 changes.append(file)
-
+        print('End of changes in _check_all routine: ',changes)
+        input('exit routine')
         return changes
 
     def fetch(self):
@@ -81,7 +89,8 @@ class Senko:
             True - if changes were made, False - if not.
         """
         changes = self._check_all()
-
+        print('changes in update routine:',changes)
+        print('self.url: ',self.url)
         for file in changes:
             with open(file, "w") as local_file:
                 local_file.write(self._get_file(self.url + "/" + file))
