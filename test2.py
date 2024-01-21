@@ -1,2 +1,2 @@
-print('Test2 in main dir')
-#UPDATE 4
+print('Test2 in app dir')
+#UPDATE 5
