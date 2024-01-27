@@ -1,4 +1,3 @@
-import senko
 import machine
 from machine import Pin
 from machine import ADC
@@ -6,32 +5,10 @@ import time
 from time import sleep
 import dht
 import network
-from CONFIG import SSID, PASSWORD, USER, REPOSITORY
-
-#OTA = senko.Senko(
-#  user="Eric8266", # Required
-#  repo="OTA-SENKO", # Required
-#  branch="master", # Optional: Defaults to "master"
-#  working_dir="app", # Optional: Defaults to "app"
-#  files = ["boot.py", "main.py"]
-#)
-
-#GITHUB_URL = "https://github.com/Eric8266/OTA-SENKO/"
-#OTA = senko.Senko(url=GITHUB_URL, files=["test1.py", "test2.py"])
-
-OTA = senko.Senko(USER, REPOSITORY, files = ["test1.py", "test2.py"])
-print('OTA: ',OTA)
-
-power_status = Pin(13, Pin.OUT)
-wifi_status = Pin(12, Pin.OUT)
-pump = Pin(14, Pin.OUT)
-pump_status = Pin(16, Pin.IN)
-
-power_status.on()  # Power is ON
-wifi_status.off()  # Wifi is OFF
-pump.off()  # Pump set to OFF
-pump_status = pump
-
+from CONFIG import SSID, PASSWORD, USER, GITHUB_URL, GITHUB_RAW_URL, REPOSITORY, BRANCH, FILES, REMOTE_UPDATE
+print('Before import of senko')
+import senko
+print('After import of senko')
 
 def wifi_setup():  #Exit of Routine: wifi_status() = 1 means connected, 0 mean not connected
     wifi_status.off()  #Wifi LED is put OFF
@@ -109,41 +86,73 @@ def read_moist():  #From FC-28 moisture sensor module
 ########################################################################################
 ###                          MAIN PROGRAM STARTS HERE                                ###
 ########################################################################################
+###           Check if new Files are available, if YES, upload in NodeMCU            ###
+########################################################################################
+url = GITHUB_RAW_URL
+user = USER
+repo = REPOSITORY
+branch = BRANCH
+files = FILES
+
+OTA = senko.Senko(
+  url = GITHUB_RAW_URL,
+  user = USER, # Required
+  repo = REPOSITORY, # Required
+  branch = BRANCH, # Optional: Defaults to "master"
+#  working_dir="app", # Optional: Defaults to "app"
+  files = FILES  #["test1.py", "test2.py"]
+)
+
+power_status = Pin(13, Pin.OUT)
+wifi_status = Pin(12, Pin.OUT)
+pump = Pin(14, Pin.OUT)
+pump_status = Pin(16, Pin.IN)
+
+power_status.on()  # Power is ON
+wifi_status.off()  # Wifi is OFF
+pump.off()  # Pump set to OFF
+pump_status = pump
+
+
 start = 1   # Start and keep running
-input('Wait here before starting program')
 
 # Setup Wifi 1st time after fresh start
 wifi_setup()
 
 # Wifi ON: Status=1 or OFF: Status=0
 # Blue LED is ON when connected
-if wifi_status() == 1:
-    print('Wifi Status = ON')
-else:
-    print('Wifi Status = OFF')
     
-#################################################################################
+######################################################################################
 ########  When Wifi is ON, check for update via OTA on Github repository
-########  UID = 'Eric8266'
-########  Repo = 'OTA'
-#################################################################################
+########  CONFIG.py contains the configuration parameters, e.g. REPOSITORY on Github
+######################################################################################
     
 if wifi_status() == 1:
-    print('Check for Update')
-    input('Wait here, before updating')
-######################
-###  NEW CODE OTA  ###
+    print('Wifi is ON, Check for Updates, if REMOTE_UPDATE = YES in CONFIG.py file')
 
-if OTA.update():
-    print("Updated to the latest version! Rebooting...")
-    input('Update done')
-    machine.reset()
+####################################################
+###  ONLY check for new Versions, NO Updates     ###
+####################################################
+#     if OTA.fetch():
+#         print("A newer version is available!")
+#     else:
+#         print("Up to date! Ready for the rest of the program")
     
-print('No update done !!!')
+###########################################################
+###  Check for new Versions, Update and Reboot NodeMCU  ###
+###########################################################
+    if REMOTE_UPDATE == "YES":        
+        print('UPDATE')
+        if OTA.update():
+            print("Updated to the latest file versions ! Rebooting...")
+            machine.reset()
+        else:    
+            print('NO updates available, keep as is !!!')
 
-if OTA.fetch():
-    print("A newer version is available!")
 else:
-    print("Up to date!")
-    
+    print('Wifi is OFF, continue without Wifi.')
+#######################################################################################################
+########  Start rest of program, when Wifi was ON, check for update via OTA on Github repository done
+#######################################################################################################
+
 
