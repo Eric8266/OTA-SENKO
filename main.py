@@ -6,9 +6,9 @@ from time import sleep
 import dht
 import network
 from CONFIG import SSID, PASSWORD, USER, GITHUB_URL, GITHUB_RAW_URL, REPOSITORY, BRANCH, FILES, REMOTE_UPDATE
-print('Before import of senko')
+#print('Before import of senko')
 import senko
-print('After import of senko')
+#print('After import of senko')
 
 def wifi_setup():  #Exit of Routine: wifi_status() = 1 means connected, 0 mean not connected
     wifi_status.off()  #Wifi LED is put OFF
@@ -142,7 +142,7 @@ if wifi_status() == 1:
 ###  Check for new Versions, Update and Reboot NodeMCU  ###
 ###########################################################
     if REMOTE_UPDATE == "YES":        
-        print('UPDATE')
+#        print('UPDATE')
         if OTA.update():
             print("Updated to the latest file versions ! Rebooting...")
             machine.reset()
