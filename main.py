@@ -146,18 +146,19 @@ if wifi_status() == 1:
         if OTA.update():
             print("Updated to the latest file versions ! Rebooting...")
             machine.reset()
-        else:    
-            print('NO updates available, keep as is !!!')
+#        else:    
+#            print('NO updates available, keep as is !!!')
 
 else:
     print('Wifi is OFF, continue without Wifi.')
 #######################################################################################################
 ########  Start rest of program, when Wifi was ON, check for update via OTA on Github repository done
 #######################################################################################################
-if wifi_status() == 1:
-    print('Wifi is ON, if REMOTE_ACCESS = YES in CONFIG.py, remote access with WebREPL possible')
-    import webrepl
-    webrepl.start()
+print('Execute rest of the program')
+#if wifi_status() == 1:
+#    print('Wifi is ON, if REMOTE_ACCESS = YES in CONFIG.py, remote access with WebREPL possible')
+#    import webrepl
+#    webrepl.start()
 
 while start == 1:
     pump.on()

@@ -14,7 +14,7 @@ class Senko:
 #    def __init__(self, user, repo, url=None, files=["test1.py", "test2.py"], headers={}):
 ##    def __init__(self, user, repo, url, files=["test1.py", "test2.py"], headers={}):
     def __init__(self, url, user, repo, branch, files, headers={}):          
-        print('Enter OTA initialisation routine')
+#        print('Enter OTA initialisation routine')
 #    def __init__(self, user, repo, url=None, branch="main", files=["test1.py", "test2.py"], headers={}):
         """Senko OTA agent class.
 
@@ -40,7 +40,7 @@ class Senko:
         self.headers = headers
 #        print('self.headers: ',self.headers)
         self.files = files
-        print('Exit OTA initialisation routine. Files to check for OTA updates: ',self.files)
+#        print('Exit OTA initialisation routine. Files to check for OTA updates: ',self.files)
 #        print('Are the URLs correct ?')
 
     def _check_hash(self, x, y):
@@ -62,6 +62,7 @@ class Senko:
 #        print('Payload: ',payload)
         code = payload.status_code
         print('Payload status code (if 200, file was found): ',code, 'Payload = file content: ')
+        print('')
         print(payload.text)
         print('')
 #        input('_get_file routine faultfinding. If Status code = 200, file found.')
@@ -69,7 +70,7 @@ class Senko:
 #            print('File was found.') #,file)
             return payload.text
         else:
-            print('File was not found.')
+            print('No updated file was not found.')
             return None
 
     def _check_all(self):
@@ -78,10 +79,10 @@ class Senko:
 #        print('self.base_url: ', self.base_url)
 #        input('Wait before proceeding in _check_all routine for updated files.')
         for file in self.files:
-            print('Out of files: ',self.files, 'check file: ',file)
+            print('Out of files to check for updates: ',self.files, 'check file: ',file)
 #            latest_version = self._get_file(self.url + "/" + file)
             latest_version = self._get_file(self.base_url + "/" + file)
-            print('Latest_version on Github: ')
+            print('Content of latest_version of ',file,' on Github: ')
             print(latest_version)
             print('')
 #            input('Temp WAIT in _check_all routine')
@@ -102,7 +103,11 @@ class Senko:
             
 #            input('#####  Goto next file    #####')
         
-        print('End of finding updated files. Changes found in file(s):',changes)
+        if changes == []:
+#            print('End of finding updated files. Changes found in file(s):',changes)
+            print('No updates/changes found.')
+        else:
+            print('Updates/changes found in file(s):',changes)
 #        input('exit Check_All routine')
         return changes
 
