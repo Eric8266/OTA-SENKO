@@ -5,7 +5,7 @@ import time
 from time import sleep
 import dht
 import network
-from CONFIG import SSID, PASSWORD, USER, GITHUB_URL, GITHUB_RAW_URL, REPOSITORY, BRANCH, FILES, REMOTE_UPDATE
+from CONFIG import SSID, PASSWORD, USER, GITHUB_URL, GITHUB_RAW_URL, REPOSITORY, BRANCH, FILES, REMOTE_UPDATE, REMOTE_ACCESS
 #print('Before import of senko')
 import senko
 #print('After import of senko')
@@ -154,8 +154,14 @@ else:
 #######################################################################################################
 ########  Start rest of program, when Wifi was ON, check for update via OTA on Github repository done
 #######################################################################################################
+if wifi_status() == 1:
+    print('Wifi is ON, if REMOTE_ACCESS = YES in CONFIG.py, remote access with WebREPL possible')
+    import webrepl
+    webrepl.start()
+
 while start == 1:
     pump.on()
     sleep(0.75)
     pump.off()
     sleep(0.75)
+

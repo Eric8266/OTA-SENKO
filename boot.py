@@ -6,4 +6,8 @@ import gc
 gc.collect()
 gc.enable()
 
+#import webrepl_setup
+#import webrepl
+#webrepl.start()
+
 print('Boot completed !')
