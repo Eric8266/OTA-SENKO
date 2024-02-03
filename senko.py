@@ -83,6 +83,7 @@ class Senko:
 #            latest_version = self._get_file(self.url + "/" + file)
             latest_version = self._get_file(self.base_url + "/" + file)
             print('Content of latest_version of ',file,' on Github: ')
+            print('')
             print(latest_version)
             print('')
 #            input('Temp WAIT in _check_all routine')
