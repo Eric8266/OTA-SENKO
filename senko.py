@@ -46,7 +46,7 @@ class Senko:
     def _check_hash(self, x, y):
         x_hash = uhashlib.sha1(x.encode())
         y_hash = uhashlib.sha1(y.encode())
-
+        
         x = x_hash.digest()
         y = y_hash.digest()
 
@@ -61,10 +61,11 @@ class Senko:
         payload = urequests.get(url, headers=self.headers)
 #        print('Payload: ',payload)
         code = payload.status_code
-        print('Payload status code (if 200, file was found): ',code, 'Payload = file content: ')
-        print('')
-        print(payload.text)
-        print('')
+        print('Payload status code (if 200, file was found): ',code)
+#        print('Payload status code (if 200, file was found): ',code, 'Payload = file content: ')
+#        print('')
+#        print(payload.text)
+#        print('')
 #        input('_get_file routine faultfinding. If Status code = 200, file found.')
         if code == 200:
 #            print('File was found.') #,file)
@@ -82,19 +83,28 @@ class Senko:
             print('Out of files to check for updates: ',self.files, 'check file: ',file)
 #            latest_version = self._get_file(self.url + "/" + file)
             latest_version = self._get_file(self.base_url + "/" + file)
-            print('Content of latest_version of ',file,' on Github: ')
+            print('Content of latest_version of',file,'on Github: ')
             print('')
             print(latest_version)
             print('')
-#            input('Temp WAIT in _check_all routine')
+#            input('Temp WAIT: Latest version on Github printed')
             if latest_version is None:
                 print('No, there is no updated version')
                 continue
             
             try:
+#                input('START TEST')
                 print('File: ',file)
                 with open(file, "r") as local_file:
                     local_version = local_file.read()
+                    print('Local File content:')
+                    print(local_version)
+                    print('')
+#                    input('Temp WAIT: Local version on NodeMCU printed')
+#                    print('TEST1')
+#                    hier_version ='test3.py'.read()
+#                    print('hier_version',hier_version)
+#                    input('WAIT HERE 2')
             except:
                 local_version = ""
 

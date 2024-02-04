@@ -1,9 +1,10 @@
+import dht
 import machine
-from machine import Pin
+from machine import I2C, Pin
 from machine import ADC
 import time
 from time import sleep
-import dht
+#import dht
 import network
 from CONFIG import SSID, PASSWORD, USER, GITHUB_URL, GITHUB_RAW_URL, REPOSITORY, BRANCH, FILES, REMOTE_UPDATE, REMOTE_ACCESS
 #print('Before import of senko')
@@ -56,28 +57,22 @@ def wifi_check():
 
 def read_dht():   #From DHT-11 temp/humidity module
     global temp, hum
-#    dht_pin = dht.DHT22(Pin(4))  # Comment it if you are using DHT22 and uncomment the next line
+#    dht_pin = dht.DHT22(Pin(4)) # Uncomment it if you are using DHT22 and uncomment the next line
     dht_pin = dht.DHT11(Pin(4)) # Uncomment it if you are using DHT11 and comment the above line
-    temp = hum = 0
-    try:
-        sleep(1.25) # Sample period is 1 sec
-        dht_pin.measure()
-        temp = dht_pin.temperature()
-        hum = dht_pin.humidity()
-        if (isinstance(temp, float) and isinstance(hum, float)) or (isinstance(temp, int) and isinstance(hum, int)):
-            msg = (b'{0:3.1f},{1:3.1f}'.format(temp, hum))
-            hum = round(hum, 2)
-            return(msg, temp, hum)
-        else:
-            return('Invalid DHT sensor readings.')
-    except OSError as e:
-        return('Failed to read DHT sensor.')
+    dht_pin.measure()
+    temp = dht_pin.temperature()
+    hum = dht_pin.humidity()
+#        print('temp',temp,'hum',hum)
+#        if (isinstance(temp, float) and isinstance(hum, float)) or (isinstance(temp, int) and isinstance(hum, int)):
+#            msg = (b'{0:3.1f},{1:3.1f}'.format(temp, hum))
+#            hum = round(hum, 2)
+    return(temp, hum)
 
 def read_moist():  #From FC-28 moisture sensor module
     global moi
     moi = 0
     moisture = ADC(0)
-    sleep(1.25)
+#    sleep(1.25)
     moi = moisture.read()
     moi = round((100*((1024 - moi)/556)))  #Moisture in %, Must be calibrated !!!
     return(moi) 
@@ -159,10 +154,17 @@ print('Execute rest of the program')
 #    print('Wifi is ON, if REMOTE_ACCESS = YES in CONFIG.py, remote access with WebREPL possible')
 #    import webrepl
 #    webrepl.start()
-
+Teller = 0
 while start == 1:
+    Teller = Teller +1
     pump.on()
-    sleep(0.75)
+    sleep(0.55)
     pump.off()
-    sleep(0.75)
+    sleep(0.55)
+    read_dht()
+    if Teller == 10:
+        print('Temperature:',temp,'C, Humidity:',hum,'%')
+        Teller = 0
+        
+
 
