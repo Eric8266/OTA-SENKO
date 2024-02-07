@@ -6,7 +6,7 @@ REPOSITORY = "OTA-SENKO"
 BRANCH = "main"
 GITHUB_URL = "https://github.com"
 GITHUB_RAW_URL = "https://raw.githubusercontent.com"
-FILES = "test1.py", "test2.py"  # FILES to update from the Repository
+FILES = "main.py", "CONFIG.py"  # FILES to update from the Repository
 REMOTE_UPDATE = "YES"  # Update FILES remote
 REMOTE_ACCESS = "NO"  # Access via WebREPL
 UPDATE_TIMER = "YES"  # Allow updates per PERIODIC intervals = UPDATE_PERIODIC * UPDATE_PERIOD_MULT 
