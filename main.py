@@ -169,6 +169,8 @@ def read_moist():  #From FC-28 moisture sensor module
 ########################################################################################
 ###           Check if new Files are available, if YES, upload in NodeMCU            ###
 ########################################################################################
+
+#if __name__ == '__main__':
 try:
     # Allowes Exceptions, e.g. CTRL+C to interupt the program, and clear the HW timer
     while True:
@@ -201,7 +203,7 @@ try:
         ########  CONFIG.py contains the configuration parameters, e.g. REPOSITORY on Github
         ######################################################################################
 #        input('Stap2')
-        wifi_OTA()  # Check when Wifi=ON, than Update files if updates available
+        wifi_OTA()  # Check when Wifi=ON, than Update files if updates available on Github
 
         #######################################################################################################
         ########  When Wifi is ON, check for REMOTE_ACCESS with WebREPL
@@ -239,4 +241,4 @@ except OSError:
     print('Failed to read DHT sensor.')
     tim.deinit()
     print("Exiting the program.")
-    
+
